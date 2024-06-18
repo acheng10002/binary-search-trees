@@ -100,18 +100,25 @@ function merge(leftSubArr, rightSubArr) {
 
 // function that takes an array and turns it into a balanced BST and returns the root node
 function buildTree(arr) {
-  // PROJECT STEP #3
+  // PROJECT STEP #3 - takes an array of data and turns it into a balanced BST, returns the level-0 root node
   let mergedArr = mergeSort(arr);
 
   // inner function performs recursive tree construction
   function createBST(mergedArr, start, end) {
-    if (start > end) return null; // base case: subarray being processed is invalid or empty
-    const mid = Math.floor((start + end) / 2); // find the middle index of the current array/subarray
+    // base case: subarray being processed is invalid or empty
+    if (start > end) return null;
 
-    const root = new Node(mergedArr[mid]); // new Node is created with the middle element as data
+    // find the middle index of the current array/subarray
+    const mid = Math.floor((start + end) / 2);
 
-    root.left = createBST(mergedArr, start, mid - 1); // recursively creates left subtree
-    root.right = createBST(mergedArr, mid + 1, end); // recursively creates right subtree
+    // new Node is created with the middle element as data
+    const root = new Node(mergedArr[mid]);
+
+    // recursively creates left subtree
+    root.left = createBST(mergedArr, start, mid - 1);
+
+    // recursively creates right subtree
+    root.right = createBST(mergedArr, mid + 1, end);
 
     return root;
   }

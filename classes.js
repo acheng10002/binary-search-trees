@@ -1,7 +1,7 @@
 import { buildTree } from "./functions.js";
 
 class Node {
-  // PROJECT STEP #1
+  // PROJECT STEP #1 - data, left, and right attributes
   constructor(data) {
     this.data = data;
     this.left = null;
@@ -10,14 +10,14 @@ class Node {
 }
 
 class Tree {
-  // PROJECT STEP #2
+  // PROJECT STEP #2 - accepts an array when initialized; has root att which uses the return value of buildTree
   constructor(arr) {
     this.root = buildTree(arr);
   }
 
   // method to insert a given value into the BST
   insert(data) {
-    // PROJECT STEP #4
+    // PROJECT STEP #4 - inserts given value into the balanced BST
     this.root = this.insertNode(this.root, data);
   }
 
@@ -41,7 +41,7 @@ class Tree {
 
   // method to delete a given value from the BST
   delete(data) {
-    // PROJECT STEP #4
+    // PROJECT STEP #4 - deals with all the cases
     // updates the root of the tree with the result of deleteNode
     this.root = this.deleteNode(this.root, data);
   }
@@ -97,7 +97,7 @@ class Tree {
 
   // method to find a given value in the BST and returns the node with it
   find(data) {
-    // PROJECT STEP #5
+    // PROJECT STEP #5 - returns the node with the given value
     return (this.root = this.searchNode(this.root, data));
   }
 
@@ -110,7 +110,7 @@ class Tree {
 
     // if the node's data is less than the given data, search in the right subtree
     if (node.data < data) {
-      return searchNode(node.right, data);
+      return this.searchNode(node.right, data);
     }
 
     // otherwise, search the left subtree
@@ -119,7 +119,7 @@ class Tree {
 
   // function that takes a root node and takes an optional callback on the data in the nodes in level order callback = console.log
   levelOrder(callback = console.log) {
-    // PROJECT STEP #6
+    // PROJECT STEP #6 - accepts an option callback, traverse the tree in breadth-first level order and provide each node as an argument to the callback
     // initializes empty array that will store all node.data values
     let BSTarray = [];
 
@@ -138,6 +138,8 @@ class Tree {
       // dequeues the front node and assigns it it to current
       const current = q.shift();
 
+      callback(current.data);
+
       // visit the node and pushes node.data into the array
       BSTarray.push(current.data);
 
@@ -149,9 +151,12 @@ class Tree {
       if (current.right != null) q.push(current.right);
     }
 
-    // logs array storing all node.data values that have been traversed in level-roder
-    callback(BSTarray);
-    return BSTarray;
+    // logs array storing all node.data values that have been traversed in level-order
+    if (callback) {
+      callback(BSTarray);
+    } else {
+      return BSTarray;
+    }
   }
 
   // function that does a level order traversal, takes in a callback that defaults to console.log
@@ -200,14 +205,13 @@ class Tree {
 
   // public method that starts the in-order traversal
   inOrder(callback = console.log) {
-    // PROJECT STEP #7
+    // PROJECT STEP #7 - accepts optional callback
     // initializes an empty array to store the nodes being traversed
     let result = [];
-    this.inOrderHelper(this.root, result);
+    this.inOrderHelper(this.root, result, callback);
     // if a callback is passed in, return the result of callback(result)
     if (callback) {
       return callback(result);
-
       // otherwise, just return the array created by in-order traversal
     } else {
       return result;
@@ -215,48 +219,56 @@ class Tree {
   }
 
   // left subtree, root node, right subtree: recursive helper method
-  inOrderHelper(node, result) {
+  inOrderHelper(node, result, callback) {
     // base case: stops the traversal when a leaf node's child, which is null, is reached
     if (node === null) return;
 
     // recursive call with left child of the current node, traverses the left subtree
-    this.inOrderHelper(node.left, result);
+    this.inOrderHelper(node.left, result, callback);
+
+    if (callback) {
+      callback(node.data);
+    }
 
     // visit the node and pushes node.data into the array
     result.push(node.data);
 
     // recursive call with the right child of the current node, traverses the right subtree
-    this.inOrderHelper(node.right, result);
+    this.inOrderHelper(node.right, result, callback);
     // }
   }
 
   // public method that starts the pre-order traversal
   preOrder(callback = console.log) {
-    // PROJECT STEP #7
+    // PROJECT STEP #7 - accepts optional callback
     // initializes an empty array to store the nodes being traversed
     let result = [];
-    this.preOrderHelper(this.root, result);
+    this.preOrderHelper(this.root, result, callback);
     // logs the array;
     callback(result);
     return result;
   }
 
   // root node, left subtree, right subtree: recursive helper method
-  preOrderHelper(node, result) {
+  preOrderHelper(node, result, callback) {
     if (node === null) return [];
+
+    if (callback) {
+      callback(node.data);
+    }
 
     // visit the node and pushes node.data into the array
     result.push(node.data);
 
     // recursive call with the left child of the current node, traverses the left subtree
-    this.preOrderHelper(node.left, result);
+    this.preOrderHelper(node.left, result, callback);
 
     // recursive call with the right child of the current node, traverses the right subtree
-    this.preOrderHelper(node.right, result);
+    this.preOrderHelper(node.right, result, callback);
   }
 
   preOrderIterative(callback = console.log) {
-    // PROJECT STEP #7
+    // PROJECT STEP #7 - accepts optional callback
     if (this.root === null) return [];
 
     // initialize an empty array to store the nodes being traversed
@@ -294,24 +306,28 @@ class Tree {
 
   // public method that starts the post-order traversal
   postOrder(callback = console.log) {
-    // PROJECT STEP #7
+    // PROJECT STEP #7 - accepts optional callback
     // initializes an empty array to store the nodes being traversed
     let result = [];
-    this.postOrderHelper(this.root, result);
+    this.postOrderHelper(this.root, result, callback);
     // logs the array;
     callback(result);
     return result;
   }
 
   // left subtree, right subtree, root node: recursive helper method
-  postOrderHelper(node, result) {
+  postOrderHelper(node, result, callback) {
     if (node === null) return;
 
     // recursive call with the left child of the current node, traverses the left subtree
-    this.postOrderHelper(node.left, result);
+    this.postOrderHelper(node.left, result, callback);
 
     // recursive call with the right child of the current node, traverses the right subtree
-    this.postOrderHelper(node.right, result);
+    this.postOrderHelper(node.right, result, callback);
+
+    if (callback) {
+      callback(node.data);
+    }
 
     // visit the node and pushes node.data into the array
     result.push(node.data);
@@ -319,7 +335,7 @@ class Tree {
 
   // returns the given node's height - the number of edges in the longest path from the given node to a leaf node
   height(node) {
-    // PROJECT STEP #8
+    // PROJECT STEP #8 - returns the given node's height
     // returns the node with the given value
     this.find(node);
 
@@ -373,7 +389,7 @@ class Tree {
   }
 
   depth(node) {
-    // PROJECT STEP #9
+    // PROJECT STEP #9 - returns the given node's depth
 
     // checks if the tree is empty
     if (this.root === null) return;
@@ -408,7 +424,7 @@ class Tree {
 
   // checks if a binary search tree is balanced with an iterative post-order traversal
   isBalanced() {
-    // PROJECT STEP #10
+    // PROJECT STEP #10 - checks if the tree is balanced
     // an empty tree is considered balanced
     if (!this.root) return true;
 
@@ -512,71 +528,36 @@ class Tree {
   }
 
   rebalance() {
-    // PROJECT STEP #11
+    // PROJECT STEP #11 - rebalances an unbalanced tree
 
-    // do an in-order traversal of an unbalanced tree and pass the resulting array to the buildTree callback
-    let balancedBST = this.inOrder(buildTree);
+    let stack = [];
+    let current = this.root;
+    let result = [];
 
-    // log buildTree's return value
-    console.log(balancedBST);
+    // Continue until there are no more nodes to process
+    while (current !== null || stack.length > 0) {
+      // reach the leftmost node of the current node
+      while (current !== null) {
+        // place pointer to a node on the stack before traversing the node's left subtree
+        stack.push(current);
+        current = current.left;
+      }
 
-    // return that return value
-    return balancedBST;
+      // current must be null at this point
+      current = stack.pop();
+      /// add the node data to the result list
+      result.push(current.data);
+
+      // the node and its left subtree have been visited, now it's the right subtree's turn
+      current = current.right;
+    }
+
+    /* pass the in-order data array to buildTree to create a balanced BST 
+    the return value of buildTree is the ROOT ATTRIBUTE OF THE TREE CLASS */
+    this.root = buildTree(result);
+
+    return this.root;
   }
-  /*
-
-    Node {
-      data: 8,
-      left: Node {
-        data: 4,
-        left: Node { 
-          data: 1, 
-          left: null, 
-          right: Node { 
-            data: 3,
-            left: Node { 
-              data: 2,
-              left: null,
-              right: null 
-                        }
-            right: null 
-                      }
-
-                    },
-        right: Node { 
-          data: 5, 
-          left: null, 
-          right: Node { 
-            data: 7,
-            left: null,
-            right: null 
-                      } 
-                    }
-      },
-      right: Node { 
-        data: 67,
-        left: Node { 
-          data: 9, 
-          left: null, 
-          right: Node { 
-            data: 23,
-            left: null,
-            right: null
-                      } 
-                    },
-        right: Node { 
-          data: 324, 
-          left: null, 
-          right: Node { 
-            data: 6345,
-            left: null,
-            right: null
-                      }
-                    }
-                   }
-                  }
-        }
-*/
 }
 
 export { Node, Tree };
