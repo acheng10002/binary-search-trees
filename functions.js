@@ -100,7 +100,7 @@ function merge(leftSubArr, rightSubArr) {
 
 // function that takes an array and turns it into a balanced BST and returns the root node
 function buildTree(arr) {
-  // project step #3
+  // PROJECT STEP #3
   let mergedArr = mergeSort(arr);
 
   // inner function performs recursive tree construction
