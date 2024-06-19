@@ -1,7 +1,7 @@
 import { buildTree } from "./functions.js";
 
 class Node {
-  // PROJECT STEP #1 - data, left, and right attributes
+  // PROJECT STEP #1 - class with data, left, and right attributes
   constructor(data) {
     this.data = data;
     this.left = null;
@@ -10,7 +10,7 @@ class Node {
 }
 
 class Tree {
-  // PROJECT STEP #2 - accepts an array when initialized; has root att which uses the return value of buildTree
+  // PROJECT STEP #2 - class which accepts an array when initialized; has root att which uses the return value of buildTree
   constructor(arr) {
     this.root = buildTree(arr);
   }
@@ -41,7 +41,7 @@ class Tree {
 
   // method to delete a given value from the BST
   delete(data) {
-    // PROJECT STEP #4 - deals with all the cases
+    // PROJECT STEP #4 - deletes given value from balanced BST and deals with all the cases
     // updates the root of the tree with the result of deleteNode
     this.root = this.deleteNode(this.root, data);
   }
@@ -119,7 +119,8 @@ class Tree {
 
   // function that takes a root node and takes an optional callback on the data in the nodes in level order callback = console.log
   levelOrder(callback = console.log) {
-    // PROJECT STEP #6 - accepts an option callback, traverse the tree in breadth-first level order and provide each node as an argument to the callback
+    /* PROJECT STEP #6 - accepts an option callback, traverse the tree in breadth-first level order 
+    and provide each node as an argument to the callback and returns an array of values */
     // initializes empty array that will store all node.data values
     let BSTarray = [];
 
@@ -205,7 +206,7 @@ class Tree {
 
   // public method that starts the in-order traversal
   inOrder(callback = console.log) {
-    // PROJECT STEP #7 - accepts optional callback
+    // PROJECT STEP #7 - accepts optional callback that does an in-order traversal
     // initializes an empty array to store the nodes being traversed
     let result = [];
     this.inOrderHelper(this.root, result, callback);
@@ -240,13 +241,15 @@ class Tree {
 
   // public method that starts the pre-order traversal
   preOrder(callback = console.log) {
-    // PROJECT STEP #7 - accepts optional callback
+    // PROJECT STEP #7 - accepts optional callback that does an pre-order traversal
     // initializes an empty array to store the nodes being traversed
     let result = [];
     this.preOrderHelper(this.root, result, callback);
-    // logs the array;
-    callback(result);
-    return result;
+    if (callback) {
+      callback(result);
+    } else {
+      return result;
+    }
   }
 
   // root node, left subtree, right subtree: recursive helper method
@@ -306,13 +309,16 @@ class Tree {
 
   // public method that starts the post-order traversal
   postOrder(callback = console.log) {
-    // PROJECT STEP #7 - accepts optional callback
+    // PROJECT STEP #7 - accepts optional callback that does a post-order traversal
     // initializes an empty array to store the nodes being traversed
     let result = [];
     this.postOrderHelper(this.root, result, callback);
-    // logs the array;
-    callback(result);
-    return result;
+
+    if (callback) {
+      callback(result);
+    } else {
+      return result;
+    }
   }
 
   // left subtree, right subtree, root node: recursive helper method
